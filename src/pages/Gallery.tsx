@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { products } from '../data/products';
+import { useLanguage } from '../context/LanguageContext';
 
 const Gallery: React.FC = () => {
+  const { t } = useLanguage();
   const [filter, setFilter] = useState<'all' | 'available' | 'sold'>('all');
 
   const filteredProducts = products.filter(product => {
@@ -15,10 +17,10 @@ const Gallery: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Gallery
+          {t('gallery.title')}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          Explore our exclusive collection of automotive art pieces
+          {t('gallery.description')}
         </p>
 
         {/* Filters - Replit style */}
@@ -31,7 +33,7 @@ const Gallery: React.FC = () => {
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            All
+            {t('gallery.all')}
           </button>
           <button
             onClick={() => setFilter('available')}
@@ -41,7 +43,7 @@ const Gallery: React.FC = () => {
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            Available
+            {t('gallery.available')}
           </button>
           <button
             onClick={() => setFilter('sold')}
@@ -51,7 +53,7 @@ const Gallery: React.FC = () => {
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            Sold Out
+            {t('gallery.sold')}
           </button>
         </div>
       </div>
@@ -66,7 +68,7 @@ const Gallery: React.FC = () => {
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
           <p className="text-gray-500 dark:text-gray-400">
-            No products found for the selected filter.
+            {t('gallery.no-products')}
           </p>
         </div>
       )}

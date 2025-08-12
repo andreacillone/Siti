@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface Product {
   id: string;
@@ -19,6 +20,8 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { formatPrice, t } = useLanguage();
+
   return (
     <Link to={`/product/${product.id}`} className="group block">
       <div className="bg-white dark:bg-karma-dark rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
@@ -39,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
               }`}
             >
-              {product.available ? 'Available' : 'Sold Out'}
+              {product.available ? t('product.available') : t('product.sold-out')}
             </span>
           </div>
         </div>
@@ -56,7 +59,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-karma-purple">
-              €{product.price.toLocaleString()}
+              {formatPrice(product.price)}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               #{product.idCode}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, ShoppingCart, Sun, Moon, User } from 'lucide-react';
+import { Search, ShoppingCart, Sun, Moon, User, Settings } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 interface HeaderProps {
   onSearchClick: () => void;
@@ -13,6 +15,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
   const { isDark, toggleTheme } = useTheme();
   const { itemCount } = useCart();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -23,8 +26,12 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
         <div className="flex items-center justify-between h-16">
           {/* Left side - Logo and Navigation */}
           <div className="flex items-center space-x-8">
-            <Link to="/" className="text-2xl font-bold text-karma-purple">
-              KARMA
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/karma-logo.svg" 
+                alt="KARMA" 
+                className="h-8 w-auto"
+              />
             </Link>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -36,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
                     : 'text-gray-700 dark:text-gray-300 hover:text-karma-purple'
                 }`}
               >
-                Gallery
+                {t('nav.gallery')}
               </Link>
               <Link 
                 to="/support" 
@@ -46,19 +53,21 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
                     : 'text-gray-700 dark:text-gray-300 hover:text-karma-purple'
                 }`}
               >
-                Support
+                {t('nav.support')}
               </Link>
               <button
                 onClick={onSearchClick}
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-karma-purple transition-colors"
               >
-                Search
+                {t('nav.search')}
               </button>
             </nav>
           </div>
 
           {/* Right side - Actions */}
           <div className="flex items-center space-x-4">
+            <LanguageSelector />
+            
             <button
               onClick={onSearchClick}
               className="p-2 text-gray-700 dark:text-gray-300 hover:text-karma-purple transition-colors md:hidden"
@@ -72,6 +81,15 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
+
+            {user?.isAdmin && (
+              <Link
+                to="/admin"
+                className="p-2 text-gray-700 dark:text-gray-300 hover:text-karma-purple transition-colors"
+              >
+                <Settings size={20} />
+              </Link>
+            )}
 
             <Link
               to="/account"

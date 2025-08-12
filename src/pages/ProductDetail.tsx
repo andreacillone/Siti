@@ -3,11 +3,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const { t, formatPrice } = useLanguage();
   
   const product = products.find(p => p.id === id);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -18,13 +20,13 @@ const ProductDetail: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Product not found
+            {t('product.not-found')}
           </h1>
           <Link
             to="/gallery"
             className="text-karma-purple hover:underline"
           >
-            Back to Gallery
+            {t('product.back')}
           </Link>
         </div>
       </div>
@@ -72,7 +74,7 @@ const ProductDetail: React.FC = () => {
           className="inline-flex items-center text-karma-purple hover:text-karma-purple/80 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
-          Back to gallery
+          {t('product.back')}
         </Link>
 
         {nextProduct && (
@@ -80,7 +82,7 @@ const ProductDetail: React.FC = () => {
             onClick={() => navigate(`/product/${nextProduct.id}`)}
             className="inline-flex items-center text-karma-purple hover:text-karma-purple/80 transition-colors"
           >
-            Next product
+            {t('product.next')}
             <ArrowRight size={20} className="ml-2" />
           </button>
         )}
@@ -138,7 +140,7 @@ const ProductDetail: React.FC = () => {
               onClick={() => toggleSection('frame')}
               className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-karma-gray rounded-lg text-left hover:bg-gray-200 dark:hover:bg-karma-gray/80 transition-colors"
             >
-              <span className="font-medium text-gray-900 dark:text-white">FRAME USED</span>
+              <span className="font-medium text-gray-900 dark:text-white">{t('product.frame')}</span>
               <ChevronRight 
                 size={20} 
                 className={`transform transition-transform ${expandedSection === 'frame' ? 'rotate-90' : ''}`}
@@ -154,7 +156,7 @@ const ProductDetail: React.FC = () => {
               onClick={() => toggleSection('dimensions')}
               className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-karma-gray rounded-lg text-left hover:bg-gray-200 dark:hover:bg-karma-gray/80 transition-colors"
             >
-              <span className="font-medium text-gray-900 dark:text-white">TOTAL DIMENSIONS</span>
+              <span className="font-medium text-gray-900 dark:text-white">{t('product.dimensions')}</span>
               <ChevronRight 
                 size={20} 
                 className={`transform transition-transform ${expandedSection === 'dimensions' ? 'rotate-90' : ''}`}
@@ -170,7 +172,7 @@ const ProductDetail: React.FC = () => {
               onClick={() => toggleSection('idcode')}
               className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-karma-gray rounded-lg text-left hover:bg-gray-200 dark:hover:bg-karma-gray/80 transition-colors"
             >
-              <span className="font-medium text-gray-900 dark:text-white">ID CODE</span>
+              <span className="font-medium text-gray-900 dark:text-white">{t('product.idcode')}</span>
               <ChevronRight 
                 size={20} 
                 className={`transform transition-transform ${expandedSection === 'idcode' ? 'rotate-90' : ''}`}
@@ -186,7 +188,7 @@ const ProductDetail: React.FC = () => {
               onClick={() => toggleSection('videos')}
               className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-karma-gray rounded-lg text-left hover:bg-gray-200 dark:hover:bg-karma-gray/80 transition-colors"
             >
-              <span className="font-medium text-gray-900 dark:text-white">VIDEO LINKS</span>
+              <span className="font-medium text-gray-900 dark:text-white">{t('product.videos')}</span>
               <ChevronRight 
                 size={20} 
                 className={`transform transition-transform ${expandedSection === 'videos' ? 'rotate-90' : ''}`}
@@ -210,6 +212,7 @@ const ProductDetail: React.FC = () => {
                   </div>
                 ) : (
                   <p className="text-gray-700 dark:text-gray-300">No videos available</p>
+                  <p className="text-gray-700 dark:text-gray-300">{t('product.no-videos')}</p>
                 )}
               </div>
             )}
@@ -219,7 +222,7 @@ const ProductDetail: React.FC = () => {
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                €{product.price.toLocaleString()}
+                {formatPrice(product.price)}
               </span>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -228,7 +231,7 @@ const ProductDetail: React.FC = () => {
                     : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                 }`}
               >
-                {product.available ? 'Available' : 'Sold Out'}
+                {product.available ? t('product.available') : t('product.sold-out')}
               </span>
             </div>
 
@@ -242,7 +245,7 @@ const ProductDetail: React.FC = () => {
               }`}
             >
               <ShoppingCart size={20} className="mr-2" />
-              {product.available ? 'Add to Cart' : 'Sold Out'}
+              {product.available ? t('product.add-to-cart') : t('product.sold-out')}
             </button>
           </div>
         </div>

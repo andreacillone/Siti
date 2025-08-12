@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const Cart: React.FC = () => {
   const { items, removeItem, total, clearCart } = useCart();
+  const { t, formatPrice } = useLanguage();
 
   if (items.length === 0) {
     return (
@@ -12,16 +14,16 @@ const Cart: React.FC = () => {
         <div className="text-center py-12">
           <ShoppingBag size={64} className="mx-auto text-gray-400 mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Your cart is empty
+            {t('cart.empty')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Discover our exclusive collection of automotive art
+            {t('cart.empty.desc')}
           </p>
           <Link
             to="/gallery"
             className="inline-flex items-center px-6 py-3 bg-karma-purple text-white font-medium rounded-md hover:bg-karma-purple/90 transition-colors"
           >
-            Browse Gallery
+            {t('cart.browse')}
             <ArrowRight size={20} className="ml-2" />
           </Link>
         </div>
@@ -33,10 +35,10 @@ const Cart: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Shopping Cart
+          {t('cart.title')}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+          {items.length} {items.length === 1 ? t('cart.item') : t('cart.items')}
         </p>
       </div>
 
@@ -60,7 +62,7 @@ const Cart: React.FC = () => {
                     ID: #{item.idCode}
                   </p>
                   <p className="text-lg font-bold text-karma-purple mt-1">
-                    €{item.price.toLocaleString()}
+                    {formatPrice(item.price)}
                   </p>
                 </div>
 
@@ -79,14 +81,14 @@ const Cart: React.FC = () => {
               onClick={clearCart}
               className="text-red-500 hover:text-red-700 font-medium"
             >
-              Clear Cart
+              {t('cart.clear')}
             </button>
             
             <Link
               to="/gallery"
               className="text-karma-purple hover:underline font-medium"
             >
-              Continue Shopping
+              {t('cart.continue')}
             </Link>
           </div>
         </div>
@@ -95,34 +97,34 @@ const Cart: React.FC = () => {
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-karma-dark rounded-lg shadow-lg p-6 sticky top-24">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              Order Summary
+              {t('cart.summary')}
             </h2>
             
             <div className="space-y-3 mb-6">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
+                <span className="text-gray-600 dark:text-gray-400">{t('cart.subtotal')}</span>
                 <span className="font-medium text-gray-900 dark:text-white">
-                  €{total.toLocaleString()}
+                  {formatPrice(total)}
                 </span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Shipping</span>
-                <span className="font-medium text-gray-900 dark:text-white">Free</span>
+                <span className="text-gray-600 dark:text-gray-400">{t('cart.shipping')}</span>
+                <span className="font-medium text-gray-900 dark:text-white">{t('cart.free')}</span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Tax</span>
+                <span className="text-gray-600 dark:text-gray-400">{t('cart.tax')}</span>
                 <span className="font-medium text-gray-900 dark:text-white">
-                  €{Math.round(total * 0.1).toLocaleString()}
+                  {formatPrice(Math.round(total * 0.1))}
                 </span>
               </div>
               
               <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
                 <div className="flex justify-between">
-                  <span className="text-lg font-semibold text-gray-900 dark:text-white">Total</span>
+                  <span className="text-lg font-semibold text-gray-900 dark:text-white">{t('cart.total')}</span>
                   <span className="text-lg font-bold text-karma-purple">
-                    €{Math.round(total * 1.1).toLocaleString()}
+                    {formatPrice(Math.round(total * 1.1))}
                   </span>
                 </div>
               </div>
@@ -132,11 +134,11 @@ const Cart: React.FC = () => {
               to="/checkout"
               className="w-full bg-karma-purple text-white py-3 px-4 rounded-md font-medium hover:bg-karma-purple/90 transition-colors text-center block"
             >
-              Proceed to Checkout
+              {t('cart.checkout')}
             </Link>
 
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
-              Secure checkout with SSL encryption
+              {t('cart.secure')}
             </p>
           </div>
         </div>
